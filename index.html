@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TLD community mods</title>
+<meta name="description" content="Work on The Long Drive's beta branch for TLD RevaMP: an in-game mod browser and two performance fixes, with measurements and the code.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site"><div class="wrap">
+  <a class="brand" href="./">thelongdrive<span>.dev</span></a>
+  <nav class="main">
+    <a href="./" aria-current="page">Work</a>
+    <a href="about.html">About</a>
+  </nav>
+</div></header>
+
+<main><div class="wrap">
+  <h1>What we've built for The Long Drive</h1>
+  <p class="lead">Work on the game's beta branch, contributed to <a href="https://github.com/Normal99/TLD-RevaMP">TLD RevaMP</a>,
+  Normal99's multiplayer and performance mod. Every number below was measured in the game, and every change links to its code.</p>
+
+  <div class="stats">
+    <div class="stat"><b>3</b><span>changes in TLD RevaMP</span></div>
+    <div class="stat"><b>2</b><span>already shipped in releases (0.68.2, 0.69.0)</span></div>
+    <div class="stat"><b>1.6 million</b><span>log lines gone from a 2-hour session</span></div>
+    <div class="stat"><b>914 lines</b><span>of code across 17 files</span></div>
+  </div>
+
+  <h2>Timeline</h2>
+  <ol class="timeline">
+    <li><time datetime="2026-10-17T02:12Z">17 Oct 2026</time> Bat fix merged into RevaMP (<a href="https://github.com/Normal99/TLD-RevaMP/pull/2">pull request #2</a>), released in <strong>0.68.2</strong> the same night.</li>
+    <li><time datetime="2026-10-17T20:52Z">17 Oct 2026</time> Rabbit fix added, released in <strong>0.69.0</strong> eight minutes later.</li>
+    <li><time datetime="2026-10-17T21:52Z">17 Oct 2026</time> In-game mod browser added to RevaMP's development branch; it reaches players with the next release.</li>
+  </ol>
+
+  <section class="work" id="mod-browser">
+    <h2>In-game mod browser</h2>
+    <p><span class="tag ok">on RevaMP's development branch</span><span class="tag">15 files &middot; +822 &minus;17 lines</span></p>
+    <p>A <strong>Mods</strong> screen in the game's settings (Settings &rarr; Revamp &rarr; Mods): browse, install,
+    update and remove mods without leaving the game.</p>
+
+    <h3>What it does</h3>
+    <ul>
+      <li>Lists the mods in RevaMP's catalog with author, size, description, source link and the version you have.</li>
+      <li><strong>Install</strong> and <strong>Update</strong> download the mod's GitHub release and put it in place; the game asks for one restart.</li>
+      <li><strong>Remove</strong> sets the mod's file aside (renamed, not deleted) for the next start.</li>
+      <li>Only mods on the approved list that ships with your RevaMP version can be installed, the same list RevaMP already
+        uses when a host sends mods to players joining a game. Anything else is listed but can't be installed.</li>
+      <li>Nothing is downloaded unless the Mods screen is open.</li>
+    </ul>
+
+    <h3>Tested</h3>
+    <table>
+      <tr><th>Check</th><th>Result</th></tr>
+      <tr><td>Catalog loads in the game</td><td>every catalog mod listed, with its state</td></tr>
+      <tr><td>Remove an installed mod</td><td>file set aside as <code>.removed</code></td></tr>
+      <tr><td>Install it again from its GitHub release</td><td>installed, byte-for-byte the approved file</td></tr>
+      <tr><td>Install a mod that isn't approved</td><td>refused before downloading</td></tr>
+      <tr><td>A different file passed off as an approved mod</td><td>refused</td></tr>
+      <tr><td>Automated checks (no game needed)</td><td>52 of 52 pass, run on every pull request</td></tr>
+    </table>
+    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/62b7282c1a9bbd5f851c5eea5645c2ae35778bf0">The code: commit 62b7282</a></p>
+  </section>
+
+  <section class="work" id="rabbits">
+    <h2>Rabbits no longer slow the game down</h2>
+    <p><span class="tag ok">in RevaMP 0.69.0</span><span class="tag">1 file &middot; +57 lines</span></p>
+
+    <h3>The problem</h3>
+    <p>The game freezes rabbits that are 200&ndash;300 m from the player, but their walking and jumping code kept
+    pushing them every frame anyway. Each push wrote a warning to the log, for every frozen rabbit, every frame:
+    13,800&ndash;16,500 lines every 20 seconds. 84% came from walking, 16% from jumping.</p>
+
+    <h3>Measured with about six rabbits in range</h3>
+    <div class="bars" role="img" aria-label="Before: 144 milliseconds per second; after: 0.8 milliseconds per second.">
+      <div class="bar-row"><span class="bar-label">Before</span><span class="bar" style="width:100%"></span><span class="bar-value">144 ms per second</span></div>
+      <div class="bar-row"><span class="bar-label">After</span><span class="bar after" style="width:0.6%"></span><span class="bar-value">0.8 ms per second</span></div>
+    </div>
+    <table>
+      <tr><th></th><th>Before</th><th>After</th></tr>
+      <tr><td>Warning lines per 20 s</td><td>13,800&ndash;16,500</td><td>0</td></tr>
+      <tr><td>Time spent per second</td><td>144 ms</td><td>0.8 ms</td></tr>
+      <tr><td>Memory churn</td><td>6 MB/s</td><td>0</td></tr>
+    </table>
+
+    <h3>The fix</h3>
+    <p>While a rabbit is frozen, its walk and jump are skipped. Turning, sounds and behaviour are unchanged, and a rabbit
+    that wakes up walks on from where it is.</p>
+    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/c0c360dfe49b131b182523ddd808d9e3175b1d78">The code: commit c0c360d</a></p>
+  </section>
+
+  <section class="work" id="bats">
+    <h2>Bats: 1.6 million log lines gone</h2>
+    <p><span class="tag ok">in RevaMP 0.68.2</span><span class="tag">1 file &middot; +35 lines</span></p>
+
+    <h3>The problem</h3>
+    <p>In a two-hour session, the game's log grew to about 170 MB: 1.6 million identical physics warnings, 99.8% of
+    the whole log, between 160 and 1,850 every second depending on frame rate.</p>
+
+    <h3>How it was found</h3>
+    <p>Unity writes this warning without saying where it comes from. So every piece of code in the game and the loaded
+    mods that sets an object's speed was wrapped with a counter. Every single warning came from one place: the bats
+    the game places at some locations, which keep steering while frozen. It happens without RevaMP too (108 warnings
+    in 15 seconds next to one bat), so it's a bug in the game itself.</p>
+
+    <h3>Measured</h3>
+    <table>
+      <tr><th>Run (new world, 15 s on foot, then eight 400 m jumps)</th><th>Frozen bat updates skipped</th><th>Warnings</th></tr>
+      <tr><td>Without the fix</td><td>&ndash;</td><td>108 in 15 s</td></tr>
+      <tr><td>With the fix, run 1</td><td>864</td><td>0</td></tr>
+      <tr><td>With the fix, run 2</td><td>4,687</td><td>0</td></tr>
+    </table>
+
+    <h3>The fix</h3>
+    <p>While a bat is frozen, its steering is skipped. Its sounds and choice of where to fly are unchanged, and an
+    unfrozen bat flies exactly as before.</p>
+    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/ca23023254046a001abe53059bd66e292024cf62">The code: commit ca23023</a>
+    &middot; <a href="https://github.com/Normal99/TLD-RevaMP/pull/2">pull request #2</a></p>
+  </section>
+
+  <h2>Get it</h2>
+  <p>The bat and rabbit fixes are in <a href="https://github.com/Normal99/TLD-RevaMP/releases">TLD RevaMP</a> 0.69.0
+  and later, for the game's <strong>beta</strong> branch (Steam &rarr; The Long Drive &rarr; Properties &rarr; Betas
+  &rarr; beta). The mod browser comes with the next RevaMP release.</p>
+</div></main>
+
+<footer class="site"><div class="wrap">
+  Unofficial community site. Not affiliated with, or endorsed by, the developers of The Long Drive.
+  &middot; <a href="about.html">About &amp; credits</a> &middot; <a href="https://github.com/AnonymousTLD">GitHub</a>
+</div></footer>
+</body>
+</html>
