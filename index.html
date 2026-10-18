@@ -1,134 +1,159 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TLD community mods</title>
-<meta name="description" content="Work on The Long Drive's beta branch for TLD RevaMP: an in-game mod browser and two performance fixes, with measurements and the code.">
+<title>TLD RevaMP</title>
+<meta name="description" content="TLD RevaMP for The Long Drive (beta): measured against the base game, plus a from-scratch multiplayer and 51 fixes. By Normal99 and AnonymousTLD.">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="site"><div class="wrap">
   <a class="brand" href="./">thelongdrive<span>.dev</span></a>
   <nav class="main">
-    <a href="./" aria-current="page">Work</a>
+    <a href="./" aria-current="page">RevaMP</a>
     <a href="about.html">About</a>
   </nav>
 </div></header>
 
 <main><div class="wrap">
-  <h1>What we've built for The Long Drive</h1>
-  <p class="lead">Work on the game's beta branch, contributed to <a href="https://github.com/Normal99/TLD-RevaMP">TLD RevaMP</a>,
-  Normal99's multiplayer and performance mod. Every number below was measured in the game, and every change links to its code.</p>
+  <h1>TLD RevaMP vs. the base game</h1>
+  <p class="lead">TLD RevaMP is a mod for The Long Drive's <strong>beta</strong> branch by <strong>Normal99</strong> and
+  <strong>AnonymousTLD</strong>: a from-scratch multiplayer and 51 fixes to the game. Everything below is measured in the game.</p>
+  <p><a class="button" href="https://github.com/Normal99/TLD-RevaMP/releases">Download RevaMP</a>
+  <a class="button ghost" href="https://github.com/Normal99/TLD-RevaMP">Source code</a></p>
 
   <div class="stats">
-    <div class="stat"><b>3</b><span>changes in TLD RevaMP</span></div>
-    <div class="stat"><b>2</b><span>already shipped in releases (0.68.2, 0.69.0)</span></div>
-    <div class="stat"><b>1.6 million</b><span>log lines gone from a 2-hour session</span></div>
-    <div class="stat"><b>914 lines</b><span>of code across 17 files</span></div>
+    <div class="stat"><b>+40%</b><span>FPS with 16 parked cars in view</span></div>
+    <div class="stat"><b>+43%</b><span>FPS with 300 items lying around</span></div>
+    <div class="stat"><b>&minus;50%</b><span>worst stutter while travelling</span></div>
+    <div class="stat"><b>&minus;96%</b><span>garbage-collection pauses</span></div>
   </div>
 
-  <h2>Timeline</h2>
-  <ol class="timeline">
-    <li><time datetime="2026-10-17T02:12Z">17 Oct 2026</time> Bat fix merged into RevaMP (<a href="https://github.com/Normal99/TLD-RevaMP/pull/2">pull request #2</a>), released in <strong>0.68.2</strong> the same night.</li>
-    <li><time datetime="2026-10-17T20:52Z">17 Oct 2026</time> Rabbit fix added, released in <strong>0.69.0</strong> eight minutes later.</li>
-    <li><time datetime="2026-10-17T21:52Z">17 Oct 2026</time> In-game mod browser added to RevaMP's development branch; it reaches players with the next release.</li>
-  </ol>
+  <section class="work" id="benchmark">
+    <h2>Measured: the same runs, with and without RevaMP</h2>
+    <p>One copy of the beta game, the same world (seed 20260924), the same settings and the same scripted runs, once
+    with only the mod loader and once with RevaMP 0.69.0 added. Three runs each, alternating; the numbers are the
+    middle run (median), with the range of all three in brackets.</p>
 
-  <section class="work" id="mod-browser">
-    <h2>In-game mod browser</h2>
-    <p><span class="tag ok">on RevaMP's development branch</span><span class="tag">15 files &middot; +822 &minus;17 lines</span></p>
-    <p>A <strong>Mods</strong> screen in the game's settings (Settings &rarr; Revamp &rarr; Mods): browse, install,
-    update and remove mods without leaving the game.</p>
+    <h3>Frames per second (higher is better)</h3>
+    <div class="bars bars-pair" role="img" aria-label="Frames per second, base game against RevaMP, per scenario.">
+      <div class="bar-group"><span class="bar-title">16 parked cars</span>
+        <div class="bar-row"><span class="bar-label">Base</span><span class="bar" style="width:27%"></span><span class="bar-value">51.6</span></div>
+        <div class="bar-row"><span class="bar-label">RevaMP</span><span class="bar after" style="width:38%"></span><span class="bar-value">72.3</span></div></div>
+      <div class="bar-group"><span class="bar-title">300 items</span>
+        <div class="bar-row"><span class="bar-label">Base</span><span class="bar" style="width:51%"></span><span class="bar-value">96.8</span></div>
+        <div class="bar-row"><span class="bar-label">RevaMP</span><span class="bar after" style="width:73%"></span><span class="bar-value">138.2</span></div></div>
+      <div class="bar-group"><span class="bar-title">Travelling at 30 m/s</span>
+        <div class="bar-row"><span class="bar-label">Base</span><span class="bar" style="width:83%"></span><span class="bar-value">158.1</span></div>
+        <div class="bar-row"><span class="bar-label">RevaMP</span><span class="bar after" style="width:99%"></span><span class="bar-value">188.5</span></div></div>
+      <div class="bar-group"><span class="bar-title">Travelling at 60 m/s</span>
+        <div class="bar-row"><span class="bar-label">Base</span><span class="bar" style="width:86%"></span><span class="bar-value">163.0</span></div>
+        <div class="bar-row"><span class="bar-label">RevaMP</span><span class="bar after" style="width:100%"></span><span class="bar-value">189.5</span></div></div>
+    </div>
 
-    <h3>What it does</h3>
+    <h3>All results</h3>
+    <table>
+      <tr><th>Run</th><th>Base game</th><th>RevaMP 0.69.0</th><th>Change</th></tr>
+      <tr><td><strong>16 parked cars</strong>, 30 s looking at them</td><td>51.6 FPS (44&ndash;52)</td><td>72.3 FPS (68&ndash;74)</td><td>+40%</td></tr>
+      <tr><td>&nbsp;&nbsp;slowest 1% of frames</td><td>23.3 ms</td><td>18.1 ms</td><td>&minus;22%</td></tr>
+      <tr><td><strong>300 resting items</strong> (bottles, cans, canisters)</td><td>96.8 FPS (72&ndash;115)</td><td>138.2 FPS (135&ndash;146)</td><td>+43%</td></tr>
+      <tr><td><strong>Travelling 1.5 km at 30 m/s</strong> (world generating ahead)</td><td>158.1 FPS (123&ndash;173)</td><td>188.5 FPS (178&ndash;190)</td><td>+19%</td></tr>
+      <tr><td>&nbsp;&nbsp;worst single frame</td><td>30.6 ms</td><td>15.3 ms</td><td>&minus;50%</td></tr>
+      <tr><td><strong>Travelling 1.5 km at 60 m/s</strong></td><td>163.0 FPS (144&ndash;173)</td><td>189.5 FPS (189&ndash;192)</td><td>+16%</td></tr>
+      <tr><td>&nbsp;&nbsp;slowest 1% of frames</td><td>16.9 ms</td><td>11.5 ms</td><td>&minus;32%</td></tr>
+      <tr><td><strong>New world:</strong> start area ready</td><td>3.56 s</td><td>2.79 s</td><td>&minus;22%</td></tr>
+      <tr><td>&nbsp;&nbsp;slowest 1% of frames while loading</td><td>64 ms</td><td>36 ms</td><td>&minus;44%</td></tr>
+      <tr><td><strong>Standing at the start</strong>, 30 s</td><td>173.3 FPS (131&ndash;186)</td><td>186.1 FPS (171&ndash;190)</td><td>+7%</td></tr>
+      <tr><td>&nbsp;&nbsp;slowest 1% of frames</td><td>11.2 ms</td><td>11.6 ms</td><td>about the same</td></tr>
+      <tr><td><strong>Garbage made per second</strong> (travelling at 30 m/s)</td><td>17.9 MB</td><td>1.5 MB</td><td>&minus;92%</td></tr>
+      <tr><td>&nbsp;&nbsp;garbage collections per second</td><td>2.1</td><td>0.08</td><td>&minus;96%</td></tr>
+      <tr><td><strong>Memory</strong> kept in use by scripts</td><td>about 90 MB</td><td>about 125 MB</td><td>+35 MB</td></tr>
+    </table>
+    <p>Garbage is memory thrown away and later cleaned up by a garbage collection, which can freeze the game for a
+    moment; RevaMP reuses memory instead, which is also why it keeps a little more in use.</p>
+
+    <h3>How it was measured</h3>
     <ul>
-      <li>Lists the mods in RevaMP's catalog with author, size, description, source link and the version you have.</li>
-      <li><strong>Install</strong> and <strong>Update</strong> download the mod's GitHub release and put it in place; the game asks for one restart.</li>
-      <li><strong>Remove</strong> sets the mod's file aside (renamed, not deleted) for the next start.</li>
-      <li>Only mods on the approved list that ships with your RevaMP version can be installed, the same list RevaMP already
-        uses when a host sends mods to players joining a game. Anything else is listed but can't be installed.</li>
-      <li>Nothing is downloaded unless the Mods screen is open.</li>
+      <li>Game: The Long Drive beta (2024.11.26b_test), Unity 2022.3.12f1, BepInEx 5.4.23.5.</li>
+      <li>PC: AMD Ryzen 9 7950X3D, NVIDIA GeForce RTX 4070, Windows 10. 1280&times;720, the game's Ultra preset, vsync off, no frame cap.</li>
+      <li>A separate measuring mod drives the runs and records every frame; it works the same with or without RevaMP.
+        The travel runs follow the main road from the start, and the route was checked to be identical in every run.</li>
+      <li>Frame times are measured on the game's main loop (the processor side, where these fixes work).</li>
+    </ul>
+  </section>
+
+  <section class="work" id="multiplayer">
+    <h2>Multiplayer, rebuilt from scratch</h2>
+    <p>RevaMP doesn't extend the beta's own multiplayer; it replaces it.</p>
+    <ul>
+      <li><strong>Host and join</strong> from the game's own Multiplayer menu (F11 in game). Steam friends see your game; no port forwarding.</li>
+      <li><strong>Play anywhere on the map:</strong> each machine simulates what's near its own player.</li>
+      <li><strong>Shared:</strong> players (on foot, seated, driving, as passengers), cars (driving, crashes, damage, parts coming off,
+        fuel and fluids), loose items, building doors and gates, creatures, guns, bullet holes and explosions,
+        sandstorms, tumbleweeds and the radio. Players can stand in a moving bus or on a car.</li>
+      <li><strong>Text chat</strong> and <strong>proximity voice</strong> (heard within 60 m).</li>
+      <li><strong>Mod transfer:</strong> a player missing a mod the host uses gets it from the host, if it's on RevaMP's approved list.</li>
+    </ul>
+    <table>
+      <tr><th>The host generating the world around 10 players</th><th>Base game</th><th>RevaMP</th></tr>
+      <tr><td>Frames per second</td><td>27</td><td>42</td></tr>
+      <tr><td>Slowest 1% of frames</td><td>160 ms</td><td>35 ms</td></tr>
+      <tr><td>Frames over 50 ms</td><td>&ndash;</td><td>none</td></tr>
+    </table>
+    <p class="small">Measured with RevaMP's own multiplayer benchmark (version 0.31), from its architecture notes.</p>
+  </section>
+
+  <section class="work" id="fixes">
+    <h2>51 fixes to the game</h2>
+    <p>Each fix targets something measured in the base game. A few of them:</p>
+    <table>
+      <tr><th>What</th><th>Base game</th><th>With RevaMP</th></tr>
+      <tr><td>The frame when the world re-centres itself (every ~4.5 km of driving)</td><td>163 ms</td><td>41 ms</td></tr>
+      <tr><td>Small car parts drawn when 16 parked cars are in view</td><td>~2,500 extra objects</td><td>tiny ones skipped: +12% FPS</td></tr>
+      <tr><td>Wheels of parked cars updated every frame</td><td>~3.8 ms per frame</td><td>skipped at rest: +25% FPS</td></tr>
+      <tr><td>Grass camera drawing every frame</td><td>every frame</td><td>every 3rd frame: +9% FPS</td></tr>
+      <tr><td>Roads generated at once when a building looks for a road</td><td>stutters of 50&ndash;130 ms</td><td>spread over worker threads</td></tr>
+      <tr><td>Each new piece of terrain</td><td>~5.5 ms on the main thread</td><td>built on a worker thread</td></tr>
+      <tr><td>A building filling itself with items</td><td>up to 54 ms in one frame</td><td>spread over several frames</td></tr>
+      <tr><td>Frozen bats far away writing to the log</td><td>1.6 million lines in 2 hours</td><td>none</td></tr>
+      <tr><td>Characters at the haunted mansion looking around</td><td>1.2 MB/s of garbage</td><td>none from this</td></tr>
+    </table>
+    <p>Most of these give exactly the same world as the base game: they were checked result by result against the
+    game's own code.</p>
+
+    <h3>Bugs in the base game, fixed</h3>
+    <ul>
+      <li>Cars could vanish from the road when one of their parts was far away.</li>
+      <li>An emptied bottle came back full (30 L) after reloading.</li>
+      <li>Items fell through the world when you arrived faster than it generated.</li>
+      <li>A bus's rear wheels were saved hanging in the air.</li>
+      <li>Lamps in buildings were lost when the building streamed out first.</li>
+      <li>A car's radiator couldn't explode properly; a worn hat could flood the game with errors.</li>
+      <li>Trailers couldn't be hitched at all in the beta.</li>
     </ul>
 
-    <h3>Tested</h3>
-    <table>
-      <tr><th>Check</th><th>Result</th></tr>
-      <tr><td>Catalog loads in the game</td><td>every catalog mod listed, with its state</td></tr>
-      <tr><td>Remove an installed mod</td><td>file set aside as <code>.removed</code></td></tr>
-      <tr><td>Install it again from its GitHub release</td><td>installed, byte-for-byte the approved file</td></tr>
-      <tr><td>Install a mod that isn't approved</td><td>refused before downloading</td></tr>
-      <tr><td>A different file passed off as an approved mod</td><td>refused</td></tr>
-      <tr><td>Automated checks (no game needed)</td><td>52 of 52 pass, run on every pull request</td></tr>
-    </table>
-    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/62b7282c1a9bbd5f851c5eea5645c2ae35778bf0">The code: commit 62b7282</a></p>
-  </section>
-
-  <section class="work" id="rabbits">
-    <h2>Rabbits no longer slow the game down</h2>
-    <p><span class="tag ok">in RevaMP 0.69.0</span><span class="tag">1 file &middot; +57 lines</span></p>
-
-    <h3>The problem</h3>
-    <p>The game freezes rabbits that are 200&ndash;300 m from the player, but their walking and jumping code kept
-    pushing them every frame anyway. Each push wrote a warning to the log, for every frozen rabbit, every frame:
-    13,800&ndash;16,500 lines every 20 seconds. 84% came from walking, 16% from jumping.</p>
-
-    <h3>Measured with about six rabbits in range</h3>
-    <div class="bars" role="img" aria-label="Before: 144 milliseconds per second; after: 0.8 milliseconds per second.">
-      <div class="bar-row"><span class="bar-label">Before</span><span class="bar" style="width:100%"></span><span class="bar-value">144 ms per second</span></div>
-      <div class="bar-row"><span class="bar-label">After</span><span class="bar after" style="width:0.6%"></span><span class="bar-value">0.8 ms per second</span></div>
-    </div>
-    <table>
-      <tr><th></th><th>Before</th><th>After</th></tr>
-      <tr><td>Warning lines per 20 s</td><td>13,800&ndash;16,500</td><td>0</td></tr>
-      <tr><td>Time spent per second</td><td>144 ms</td><td>0.8 ms</td></tr>
-      <tr><td>Memory churn</td><td>6 MB/s</td><td>0</td></tr>
-    </table>
-
-    <h3>The fix</h3>
-    <p>While a rabbit is frozen, its walk and jump are skipped. Turning, sounds and behaviour are unchanged, and a rabbit
-    that wakes up walks on from where it is.</p>
-    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/c0c360dfe49b131b182523ddd808d9e3175b1d78">The code: commit c0c360d</a></p>
-  </section>
-
-  <section class="work" id="bats">
-    <h2>Bats: 1.6 million log lines gone</h2>
-    <p><span class="tag ok">in RevaMP 0.68.2</span><span class="tag">1 file &middot; +35 lines</span></p>
-
-    <h3>The problem</h3>
-    <p>In a two-hour session, the game's log grew to about 170 MB: 1.6 million identical physics warnings, 99.8% of
-    the whole log, between 160 and 1,850 every second depending on frame rate.</p>
-
-    <h3>How it was found</h3>
-    <p>Unity writes this warning without saying where it comes from. So every piece of code in the game and the loaded
-    mods that sets an object's speed was wrapped with a counter. Every single warning came from one place: the bats
-    the game places at some locations, which keep steering while frozen. It happens without RevaMP too (108 warnings
-    in 15 seconds next to one bat), so it's a bug in the game itself.</p>
-
-    <h3>Measured</h3>
-    <table>
-      <tr><th>Run (new world, 15 s on foot, then eight 400 m jumps)</th><th>Frozen bat updates skipped</th><th>Warnings</th></tr>
-      <tr><td>Without the fix</td><td>&ndash;</td><td>108 in 15 s</td></tr>
-      <tr><td>With the fix, run 1</td><td>864</td><td>0</td></tr>
-      <tr><td>With the fix, run 2</td><td>4,687</td><td>0</td></tr>
-    </table>
-
-    <h3>The fix</h3>
-    <p>While a bat is frozen, its steering is skipped. Its sounds and choice of where to fly are unchanged, and an
-    unfrozen bat flies exactly as before.</p>
-    <p><a href="https://github.com/Normal99/TLD-RevaMP/commit/ca23023254046a001abe53059bd66e292024cf62">The code: commit ca23023</a>
-    &middot; <a href="https://github.com/Normal99/TLD-RevaMP/pull/2">pull request #2</a></p>
+    <h3>Brought back and added</h3>
+    <ul>
+      <li><strong>Rabbits</strong> and <strong>sandstorms</strong>: still in the beta's files, but nothing started them.</li>
+      <li><strong>Trailers</strong> that hitch, brake with the car, and don't creep away when parked.</li>
+      <li><strong>Driving assists</strong> (all optional): trailer sway reduction, roll correction, traction control.</li>
+      <li><strong>In-game mod browser</strong> (Settings &rarr; Revamp &rarr; Mods): install, update and remove approved mods (next release).</li>
+      <li><strong>One-key bug reports</strong> (Page Down): a zip with a screenshot, logs and your hardware.</li>
+    </ul>
   </section>
 
   <h2>Get it</h2>
-  <p>The bat and rabbit fixes are in <a href="https://github.com/Normal99/TLD-RevaMP/releases">TLD RevaMP</a> 0.69.0
-  and later, for the game's <strong>beta</strong> branch (Steam &rarr; The Long Drive &rarr; Properties &rarr; Betas
-  &rarr; beta). The mod browser comes with the next RevaMP release.</p>
+  <ol>
+    <li>Switch The Long Drive to the <strong>beta</strong> branch: Steam &rarr; right-click the game &rarr; Properties &rarr; Betas &rarr; beta.</li>
+    <li>Download the latest <a href="https://github.com/Normal99/TLD-RevaMP/releases">RevaMP release</a> and follow the INSTALL.txt inside.</li>
+    <li>Back up <code>Documents\TheLongDrive\Saves</code> first: these are test builds.</li>
+  </ol>
 </div></main>
 
 <footer class="site"><div class="wrap">
   Unofficial community site. Not affiliated with, or endorsed by, the developers of The Long Drive.
-  &middot; <a href="about.html">About &amp; credits</a> &middot; <a href="https://github.com/AnonymousTLD">GitHub</a>
+  &middot; <a href="about.html">About &amp; credits</a> &middot; <a href="https://github.com/Normal99/TLD-RevaMP">TLD RevaMP on GitHub</a>
 </div></footer>
 </body>
 </html>
