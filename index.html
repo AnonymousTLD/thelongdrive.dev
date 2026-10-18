@@ -6,6 +6,7 @@
 <title>TLD RevaMP</title>
 <meta name="description" content="TLD RevaMP for The Long Drive (beta): measured against the base game, plus a from-scratch multiplayer and 51 fixes. By Normal99 and AnonymousTLD.">
 <link rel="stylesheet" href="style.css">
+<script src="theme.js"></script>
 </head>
 <body>
 <header class="site"><div class="wrap">
@@ -20,7 +21,7 @@
   <h1>TLD RevaMP vs. the base game</h1>
   <p class="lead">TLD RevaMP is a mod for The Long Drive's <strong>beta</strong> branch by <strong>Normal99</strong> and
   <strong>AnonymousTLD</strong>: a from-scratch multiplayer and 51 fixes to the game. Everything below is measured in the game.</p>
-  <p><a class="button" href="https://github.com/Normal99/TLD-RevaMP/releases">Download RevaMP</a>
+  <p><a class="button" href="https://github.com/Normal99/TLD-RevaMP/releases/latest">Download RevaMP 0.69.0</a>
   <a class="button ghost" href="https://github.com/Normal99/TLD-RevaMP">Source code</a></p>
 
   <div class="stats">
@@ -143,12 +144,92 @@
     </ul>
   </section>
 
+  <section class="work" id="next">
+    <h2>Coming in the next release</h2>
+    <p>Already in RevaMP's code on its <code>dev</code> branch, not in a release yet. Each item links to the change itself.</p>
+    <ul class="coming">
+      <li><strong>Glued items sit in the same spot for everyone.</strong> Glue an item onto a car and the other players
+        used to see it wherever their copy last was: measured 3.49 m off before, 0.07 cm after.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/9b5b509">9b5b509</a></li>
+      <li><strong>Doors, hood, trunk, mirrors and switches move live</strong> for the other players while someone moves
+        them, instead of jumping when they let go.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/fd7363d">fd7363d</a></li>
+      <li><strong>Teleport requests (/tpa) work again</strong>: they were caught by an admin command. A waiting request
+        can no longer be taken over by a second one, asking is limited to once every 15 s, and a car arrives at the
+        height of the player it goes to.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/645356d">645356d</a></li>
+      <li><strong>Clearer joining:</strong> two different builds of the same version are refused before anything breaks,
+        with a message saying what differs, and hosting refuses a port another game already uses.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/72f5c55">72f5c55</a>
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/7c492bf">7c492bf</a></li>
+      <li><strong>The host checks what other players change</strong> (values in range, at most 20 edits a second), and
+        item and door changes only go to players within 1 km.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/1a30d62">1a30d62</a></li>
+      <li><strong>8 more fixes (59 in all):</strong> a far-item lookup that searched every item the world ever stored once
+        a second, idle smoke and dust effects on parked cars, wheel settings rewritten every frame, rust and paint
+        updates on ~850 parts of 16 parked cars, texture streaming that never streams anything, memory thrown away by
+        what you look at and by your own outfit, and optional visual trade-offs.</li>
+      <li><strong>Finding lag:</strong> a network meter (what each machine sends and receives, by message type) and a
+        play log with a 30-second &ldquo;black box&rdquo;: type <code>/mark</code> and every player in the session saves
+        the same moment.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/172d73f">172d73f</a>
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/57de228">57de228</a></li>
+      <li><strong>Installers</strong> for Windows and Linux / Steam Deck that check every download, back up what they
+        replace, and can repair or uninstall.
+        <a class="ref" href="https://github.com/Normal99/TLD-RevaMP/commit/f9775be">f9775be</a></li>
+    </ul>
+  </section>
+
   <h2>Get it</h2>
   <ol>
     <li>Switch The Long Drive to the <strong>beta</strong> branch: Steam &rarr; right-click the game &rarr; Properties &rarr; Betas &rarr; beta.</li>
-    <li>Download the latest <a href="https://github.com/Normal99/TLD-RevaMP/releases">RevaMP release</a> and follow the INSTALL.txt inside.</li>
+    <li>Download the <a href="https://github.com/Normal99/TLD-RevaMP/releases/latest">latest RevaMP release</a> and follow the INSTALL.txt inside.</li>
     <li>Back up <code>Documents\TheLongDrive\Saves</code> first: these are test builds.</li>
   </ol>
+
+  <h2 id="questions">Questions</h2>
+  <details>
+    <summary>Does it work on the normal (non-beta) game?</summary>
+    <p>No. The beta is a different version of the game underneath: of the 1,203 parts of the game's code RevaMP uses,
+    425 don't exist in the normal version, among them the world generator, the save format and the multiplayer layer.
+    RevaMP is built for the beta only.</p>
+  </details>
+  <details>
+    <summary>How do we play together?</summary>
+    <p>One player loads or starts a world and presses <strong>Host</strong> in the Multiplayer menu (F11, or the game's own
+    Multiplayer button). Steam friends then see the game in their Multiplayer menu and press <strong>Join</strong>; a
+    password is optional and no port forwarding is needed. Everyone needs exactly the same RevaMP version: the game
+    refuses a mismatch and says why.</p>
+  </details>
+  <details>
+    <summary>What happens to my saves when I join someone?</summary>
+    <p>Nothing. The host's machine owns the world and its save; joining loads the host's world and never touches your
+    own saves.</p>
+  </details>
+  <details>
+    <summary>Which keys does it add?</summary>
+    <p><strong>F11</strong> Multiplayer menu, <strong>Page Up</strong> performance overlay, <strong>Page Down</strong> bug
+    report, and the game's <strong>Voice chat</strong> key (K if it isn't bound) to talk. None of them is a key the
+    game itself uses; they can be changed in <code>BepInEx\config\tldrevamp.core.cfg</code>.</p>
+  </details>
+  <details>
+    <summary>Linux or Steam Deck?</summary>
+    <p>Install it the same way, then set the game's launch options in Steam (Properties &rarr; General) to
+    <code>WINEDLLOVERRIDES="winhttp=n,b" %command%</code>.</p>
+  </details>
+  <details>
+    <summary>Something went wrong. What should I send?</summary>
+    <p>Press <strong>Page Down</strong> right when it happens (it takes a screenshot), and once more after playing. Each
+    press writes a zip to <code>BepInEx\tldrevamp-feedback</code> with the screenshot, the logs, the session's
+    timings and your hardware. Attach it to an issue on
+    <a href="https://github.com/Normal99/TLD-RevaMP/issues">RevaMP's GitHub</a>. Logs can include your Steam name and
+    Windows user folder.</p>
+  </details>
+  <details>
+    <summary>How do I remove it?</summary>
+    <p>Delete <code>winhttp.dll</code>, <code>doorstop_config.ini</code>, <code>.doorstop_version</code>,
+    <code>changelog.txt</code> and the <code>BepInEx</code> folder from the game folder.</p>
+  </details>
 </div></main>
 
 <footer class="site"><div class="wrap">
