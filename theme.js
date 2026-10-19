@@ -1,38 +1,44 @@
-// Colour theme picker (bottom right): "brown" (the original) or "grey". The choice is remembered in this browser;
-// without storage the page simply starts brown. Loaded in <head> so the saved theme applies before the page draws.
+// Apply a saved choice before painting. System mode follows CSS, including OS changes.
 (function () {
-  var KEY = "tld-palette", root = document.documentElement;
-  var themes = [["brown", "Brown"], ["grey", "Grey"]];
-  function saved() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
-  function remember(v) { try { localStorage.setItem(KEY, v); } catch (e) {} }
-  function apply(v) {
-    if (v === "grey") root.setAttribute("data-palette", "grey"); else root.removeAttribute("data-palette");
+  "use strict";
+  var key = "tld-theme", root = document.documentElement;
+  var choices = ["system", "light", "dark"], current = "system";
+  try {
+    var saved = localStorage.getItem(key);
+    if (choices.indexOf(saved) !== -1) current = saved;
+  } catch (e) {}
+  function apply() {
+    if (current === "system") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme", current);
   }
-  apply(saved());
+  apply();
 
   document.addEventListener("DOMContentLoaded", function () {
+    var header = document.querySelector("header.site .wrap");
+    if (!header) return;
     var box = document.createElement("div");
-    box.className = "palette-picker";
+    box.className = "theme-toggle";
     box.setAttribute("role", "group");
     box.setAttribute("aria-label", "Colour theme");
     var buttons = [];
-    themes.forEach(function (t) {
+    choices.forEach(function (choice) {
       var b = document.createElement("button");
       b.type = "button";
-      b.className = "swatch swatch-" + t[0];
-      b.title = t[1];
-      b.setAttribute("aria-label", t[1] + " theme");
+      b.textContent = choice.charAt(0).toUpperCase() + choice.slice(1);
+      b.setAttribute("aria-label", choice === "system" ? "Use system colour theme" : "Use " + choice + " colour theme");
       b.addEventListener("click", function () {
-        apply(t[0]); remember(t[0]); mark();
+        current = choice;
+        apply();
+        try { localStorage.setItem(key, choice); } catch (e) {}
+        mark();
       });
-      buttons.push([b, t[0]]);
+      buttons.push([b, choice]);
       box.appendChild(b);
     });
     function mark() {
-      var current = root.getAttribute("data-palette") || "brown";
       buttons.forEach(function (x) { x[0].setAttribute("aria-pressed", String(x[1] === current)); });
     }
     mark();
-    document.body.appendChild(box);
+    header.appendChild(box);
   });
 })();

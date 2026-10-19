@@ -1,39 +1,105 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TLD RevaMP</title>
-<meta name="description" content="TLD RevaMP for The Long Drive (beta): measured against the base game, plus a from-scratch multiplayer and 51 fixes. By Normal99 and AnonymousTLD.">
-<link rel="stylesheet" href="style.css">
-<script src="theme.js"></script>
+<title>TLD RevaMP — The Long Drive performance &amp; multiplayer mod</title>
+<meta name="description" content="TLD RevaMP by Normal99 and AnonymousTLD: performance fixes and rebuilt multiplayer for The Long Drive beta. Installation, playing together, measured results and help.">
+<link rel="stylesheet" href="/style.css">
+<script src="/theme.js"></script>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <header class="site"><div class="wrap">
-  <a class="brand" href="./">thelongdrive<span>.dev</span></a>
+  <a class="brand" href="/">thelongdrive<span>.dev</span></a>
   <nav class="main">
-    <a href="./" aria-current="page">RevaMP</a>
-    <a href="about.html">About</a>
+    <a href="/" aria-current="page">RevaMP</a>
+    <a href="/about.html">About</a>
   </nav>
 </div></header>
 
-<main><div class="wrap">
-  <h1>TLD RevaMP vs. the base game</h1>
-  <p class="lead">TLD RevaMP is a mod for The Long Drive's <strong>beta</strong> branch by <strong>Normal99</strong> and
-  <strong>AnonymousTLD</strong>: a from-scratch multiplayer and 51 fixes to the game. Everything below is measured in the game.</p>
-  <p><a class="button" href="https://github.com/Normal99/TLD-RevaMP/releases/latest">Download RevaMP 0.69.0</a>
+<main id="main"><div class="wrap">
+  <h1>TLD RevaMP</h1>
+  <p class="lead">Performance fixes and rebuilt multiplayer for The Long Drive's <strong>beta</strong> branch.
+  A joint project of <a href="https://github.com/Normal99">Normal99</a> and
+  <a href="https://github.com/AnonymousTLD">AnonymousTLD</a>.</p>
+  <p><a class="button" href="https://github.com/Normal99/TLD-RevaMP/releases/latest">Download RevaMP</a>
   <a class="button ghost" href="https://github.com/Normal99/TLD-RevaMP">Source code</a></p>
 
-  <div class="stats">
-    <div class="stat"><b>+40%</b><span>FPS with 16 parked cars in view</span></div>
-    <div class="stat"><b>+43%</b><span>FPS with 300 items lying around</span></div>
-    <div class="stat"><b>&minus;50%</b><span>worst stutter while travelling</span></div>
-    <div class="stat"><b>&minus;96%</b><span>garbage-collection pauses</span></div>
-  </div>
+  <nav class="toc" aria-labelledby="contents-title">
+    <h2 id="contents-title">On this page</h2>
+    <ul>
+      <li><a href="#overview">What it is</a></li>
+      <li><a href="#install">Requirements &amp; installation</a></li>
+      <li><a href="#benchmark">Measured results</a></li>
+      <li><a href="#multiplayer">Playing together</a></li>
+      <li><a href="#fixes">Game fixes</a></li>
+      <li><a href="#next">Coming in the next release</a></li>
+      <li><a href="#questions">Questions</a></li>
+      <li><a href="#reporting">Reporting problems</a></li>
+    </ul>
+  </nav>
+
+  <section class="work" id="overview">
+    <h2>What it is</h2>
+    <p><a href="https://store.steampowered.com/app/1017180/The_Long_Drive/">The Long Drive</a> is a road-trip game
+    about driving and exploring a randomly generated desert, with car maintenance and survival elements.</p>
+    <p>TLD RevaMP is a mod for the game's beta branch. It has two halves:</p>
+    <ul>
+      <li><strong>Making the game run better:</strong> 51 fixes reduce work the game repeats, spread out world
+        generation and fix bugs in cars, items and saves. The comparisons below show the measured changes.</li>
+      <li><strong>Playing together:</strong> a multiplayer system built from scratch replaces the beta's own
+        multiplayer, sharing players, vehicles, items and world interactions.</li>
+    </ul>
+    <p>It needs your own copy of The Long Drive; the download contains the mod and its loader, not the game.
+    TLD RevaMP is free software under GPL-3.0. <a href="/about.html">About &amp; credits</a>.</p>
+  </section>
+
+  <section class="work" id="install">
+    <h2>Requirements &amp; installation</h2>
+    <p>You need The Long Drive on Steam, its <strong>beta</strong> branch, and Windows or Linux with Proton
+    (including Steam Deck). BepInEx, the loader that starts the mod, is included in the RevaMP release zip.</p>
+    <ol>
+      <li>In Steam, right-click <strong>The Long Drive</strong> &rarr; <strong>Properties</strong> &rarr;
+        <strong>Betas</strong> &rarr; select <strong>beta</strong>. Let Steam finish updating.</li>
+      <li>Close the game and back up <code>Documents\TheLongDrive\Saves</code> before installing or updating.</li>
+      <li>Open the <a href="https://github.com/Normal99/TLD-RevaMP/releases/latest">latest public release</a>.
+        Download the RevaMP zip and follow its <code>INSTALL.txt</code>: extract into the game folder containing
+        <code>TheLongDrive.exe</code>. Steam &rarr; right-click the game &rarr; <strong>Manage</strong> &rarr;
+        <strong>Browse local files</strong> opens that folder.</li>
+      <li>For a manual Linux/Proton install, set Steam &rarr; <strong>Properties</strong> &rarr;
+        <strong>General</strong> &rarr; <strong>Launch Options</strong> to
+        <code>WINEDLLOVERRIDES="winhttp=n,b" %command%</code>.</li>
+    </ol>
+    <h3>Using an installer</h3>
+    <p>If the public release includes an installer, you can use it instead of extracting the zip.
+    On Windows, download <code>install.ps1</code>, right-click it and choose <strong>Run with PowerShell</strong>.
+    On Linux or Steam Deck, download <code>install.sh</code> and run <code>bash install.sh</code> in a terminal
+    (Desktop Mode on Steam Deck). Choose <strong>Install or update</strong> and follow the prompts.
+    The Linux installer sets the Proton override when the game's Proton prefix exists; otherwise follow its
+    launch-option instructions.</p>
+    <h3>Update, repair or uninstall</h3>
+    <p>To update, close the game and copy the new release zip's files over the old ones, or run the new release's
+    installer and choose <strong>Install or update</strong>. Everyone playing together needs the same version.</p>
+    <p>For an installer-managed installation, run the installer again and choose <strong>Repair</strong> to restore
+    missing or changed files. <strong>Uninstall</strong> removes the files it installed and restores its backup;
+    settings, logs and reports stay.</p>
+    <p>For a manual installation, repair by extracting the same release zip again. To remove it, delete
+    <code>winhttp.dll</code>, <code>doorstop_config.ini</code>, <code>.doorstop_version</code>,
+    <code>changelog.txt</code> and the <code>BepInEx</code> folder from the game folder.
+    Keep any reports or settings you want first; removing BepInEx also removes other mods using that loader.</p>
+  </section>
 
   <section class="work" id="benchmark">
     <h2>Measured: the same runs, with and without RevaMP</h2>
-    <p>One copy of the beta game, the same world (seed 20260924), the same settings and the same scripted runs, once
+    <div class="stats">
+      <div class="stat"><b>+40%</b><span>FPS with 16 parked cars in view</span></div>
+      <div class="stat"><b>+43%</b><span>FPS with 300 items lying around</span></div>
+      <div class="stat"><b>&minus;50%</b><span>worst stutter while travelling</span></div>
+      <div class="stat"><b>&minus;96%</b><span>garbage collections per second</span></div>
+    </div>
+    <h3 id="measurement">How we measured</h3>
+    <p>One machine, one copy of the beta game, the same world (seed 20260924), the same settings and the same scripted runs, once
     with only the mod loader and once with RevaMP 0.69.0 added. Three runs each, alternating; the numbers are the
     middle run (median), with the range of all three in brackets.</p>
 
@@ -55,7 +121,10 @@
 
     <h3>All results</h3>
     <table>
-      <tr><th>Run</th><th>Base game</th><th>RevaMP 0.69.0</th><th>Change</th></tr>
+      <thead>
+      <tr><th scope="col">Run</th><th scope="col">Base game</th><th scope="col">RevaMP 0.69.0</th><th scope="col">Change</th></tr>
+      </thead>
+      <tbody>
       <tr><td><strong>16 parked cars</strong>, 30 s looking at them</td><td>51.6 FPS (44&ndash;52)</td><td>72.3 FPS (68&ndash;74)</td><td>+40%</td></tr>
       <tr><td>&nbsp;&nbsp;slowest 1% of frames</td><td>23.3 ms</td><td>18.1 ms</td><td>&minus;22%</td></tr>
       <tr><td><strong>300 resting items</strong> (bottles, cans, canisters)</td><td>96.8 FPS (72&ndash;115)</td><td>138.2 FPS (135&ndash;146)</td><td>+43%</td></tr>
@@ -70,14 +139,15 @@
       <tr><td><strong>Garbage made per second</strong> (travelling at 30 m/s)</td><td>17.9 MB</td><td>1.5 MB</td><td>&minus;92%</td></tr>
       <tr><td>&nbsp;&nbsp;garbage collections per second</td><td>2.1</td><td>0.08</td><td>&minus;96%</td></tr>
       <tr><td><strong>Memory</strong> kept in use by scripts</td><td>about 90 MB</td><td>about 125 MB</td><td>+35 MB</td></tr>
+      </tbody>
     </table>
     <p>Garbage is memory thrown away and later cleaned up by a garbage collection, which can freeze the game for a
     moment; RevaMP reuses memory instead, which is also why it keeps a little more in use.</p>
 
-    <h3>How it was measured</h3>
+    <h3>Measurement settings</h3>
     <ul>
       <li>Game: The Long Drive beta (2024.11.26b_test), Unity 2022.3.12f1, BepInEx 5.4.23.5.</li>
-      <li>PC: AMD Ryzen 9 7950X3D, NVIDIA GeForce RTX 4070, Windows 10. 1280&times;720, the game's Ultra preset, vsync off, no frame cap.</li>
+      <li>1280&times;720, the game's Ultra preset, vsync off, no frame cap.</li>
       <li>A separate measuring mod drives the runs and records every frame; it works the same with or without RevaMP.
         The travel runs follow the main road from the start, and the route was checked to be identical in every run.</li>
       <li>Frame times are measured on the game's main loop (the processor side, where these fixes work).</li>
@@ -87,6 +157,17 @@
   <section class="work" id="multiplayer">
     <h2>Multiplayer, rebuilt from scratch</h2>
     <p>RevaMP doesn't extend the beta's own multiplayer; it replaces it.</p>
+    <h3>How to host and join</h3>
+    <ol>
+      <li>Install the same RevaMP version on every player's game.</li>
+      <li>One player starts or loads a world, opens <strong>Multiplayer</strong> (the game's menu button or
+        <strong>F11</strong> in game) and chooses <strong>Host</strong>. A password is optional.</li>
+      <li>The other players select that Steam friend in their Multiplayer menu and choose <strong>Join</strong>.
+        Steam relay handles the connection, so this route needs no port forwarding.</li>
+    </ol>
+    <p>The host's machine owns the shared world and save. Joining loads that world and leaves your own saves alone.
+    A version mismatch is refused with an explanation.</p>
+    <h3>What is shared</h3>
     <ul>
       <li><strong>Host and join</strong> from the game's own Multiplayer menu (F11 in game). Steam friends see your game; no port forwarding.</li>
       <li><strong>Play anywhere on the map:</strong> each machine simulates what's near its own player.</li>
@@ -97,10 +178,14 @@
       <li><strong>Mod transfer:</strong> a player missing a mod the host uses gets it from the host, if it's on RevaMP's approved list.</li>
     </ul>
     <table>
-      <tr><th>The host generating the world around 10 players</th><th>Base game</th><th>RevaMP</th></tr>
+      <thead>
+      <tr><th scope="col">The host generating the world around 10 players</th><th scope="col">Base game</th><th scope="col">RevaMP</th></tr>
+      </thead>
+      <tbody>
       <tr><td>Frames per second</td><td>27</td><td>42</td></tr>
       <tr><td>Slowest 1% of frames</td><td>160 ms</td><td>35 ms</td></tr>
       <tr><td>Frames over 50 ms</td><td>&ndash;</td><td>none</td></tr>
+      </tbody>
     </table>
     <p class="small">Measured with RevaMP's own multiplayer benchmark (version 0.31), from its architecture notes.</p>
   </section>
@@ -109,7 +194,10 @@
     <h2>51 fixes to the game</h2>
     <p>Each fix targets something measured in the base game. A few of them:</p>
     <table>
-      <tr><th>What</th><th>Base game</th><th>With RevaMP</th></tr>
+      <thead>
+      <tr><th scope="col">What</th><th scope="col">Base game</th><th scope="col">With RevaMP</th></tr>
+      </thead>
+      <tbody>
       <tr><td>The frame when the world re-centres itself (every ~4.5 km of driving)</td><td>163 ms</td><td>41 ms</td></tr>
       <tr><td>Small car parts drawn when 16 parked cars are in view</td><td>~2,500 extra objects</td><td>tiny ones skipped: +12% FPS</td></tr>
       <tr><td>Wheels of parked cars updated every frame</td><td>~3.8 ms per frame</td><td>skipped at rest: +25% FPS</td></tr>
@@ -119,6 +207,7 @@
       <tr><td>A building filling itself with items</td><td>up to 54 ms in one frame</td><td>spread over several frames</td></tr>
       <tr><td>Frozen bats far away writing to the log</td><td>1.6 million lines in 2 hours</td><td>none</td></tr>
       <tr><td>Characters at the haunted mansion looking around</td><td>1.2 MB/s of garbage</td><td>none from this</td></tr>
+      </tbody>
     </table>
     <p>Most of these give exactly the same world as the base game: they were checked result by result against the
     game's own code.</p>
@@ -140,7 +229,7 @@
       <li><strong>Trailers</strong> that hitch, brake with the car, and don't creep away when parked.</li>
       <li><strong>Driving assists</strong> (all optional): trailer sway reduction, roll correction, traction control.</li>
       <li><strong>In-game mod browser</strong> (Settings &rarr; Revamp &rarr; Mods): install, update and remove approved mods (next release).</li>
-      <li><strong>One-key bug reports</strong> (Page Down): a zip with a screenshot, logs and your hardware.</li>
+      <li><strong>One-key bug reports</strong> (Page Down): a zip with a screenshot, logs and session timings.</li>
     </ul>
   </section>
 
@@ -180,13 +269,6 @@
     </ul>
   </section>
 
-  <h2>Get it</h2>
-  <ol>
-    <li>Switch The Long Drive to the <strong>beta</strong> branch: Steam &rarr; right-click the game &rarr; Properties &rarr; Betas &rarr; beta.</li>
-    <li>Download the <a href="https://github.com/Normal99/TLD-RevaMP/releases/latest">latest RevaMP release</a> and follow the INSTALL.txt inside.</li>
-    <li>Back up <code>Documents\TheLongDrive\Saves</code> first: these are test builds.</li>
-  </ol>
-
   <h2 id="questions">Questions</h2>
   <details>
     <summary>Does it work on the normal (non-beta) game?</summary>
@@ -219,22 +301,30 @@
   </details>
   <details>
     <summary>Something went wrong. What should I send?</summary>
-    <p>Press <strong>Page Down</strong> right when it happens (it takes a screenshot), and once more after playing. Each
-    press writes a zip to <code>BepInEx\tldrevamp-feedback</code> with the screenshot, the logs, the session's
-    timings and your hardware. Attach it to an issue on
-    <a href="https://github.com/Normal99/TLD-RevaMP/issues">RevaMP's GitHub</a>. Logs can include your Steam name and
-    Windows user folder.</p>
+    <p>Press <strong>Page Down</strong> right when it happens and once more after playing, then attach the report zip
+    to <a href="https://github.com/Normal99/TLD-RevaMP/issues">a RevaMP issue</a>.
+    See <a href="#reporting">Reporting problems</a> for the report folder and what to describe.</p>
   </details>
   <details>
     <summary>How do I remove it?</summary>
-    <p>Delete <code>winhttp.dll</code>, <code>doorstop_config.ini</code>, <code>.doorstop_version</code>,
-    <code>changelog.txt</code> and the <code>BepInEx</code> folder from the game folder.</p>
+    <p>Use <strong>Uninstall</strong> if you used the installer, or remove the loader files from a manual installation.
+    See <a href="#install">Update, repair or uninstall</a> for the file list.</p>
   </details>
+
+  <section class="work" id="reporting">
+    <h2>Reporting problems</h2>
+    <p>Press <strong>Page Down</strong> when the problem happens. It writes a zip to
+    <code>BepInEx/tldrevamp-feedback/</code> containing a screenshot, game and mod logs, and recent session timings.
+    Open an issue on <a href="https://github.com/Normal99/TLD-RevaMP/issues">RevaMP's GitHub</a> and attach the zip.</p>
+    <p>Include your game branch and RevaMP version, what you were doing, what you expected and what happened.
+    For multiplayer problems, say whether you were hosting or joining and how to reproduce the problem.</p>
+  </section>
 </div></main>
 
 <footer class="site"><div class="wrap">
-  Unofficial community site. Not affiliated with, or endorsed by, the developers of The Long Drive.
-  &middot; <a href="about.html">About &amp; credits</a> &middot; <a href="https://github.com/Normal99/TLD-RevaMP">TLD RevaMP on GitHub</a>
+  <p>© 2026 thelongdrive.dev — website content all rights reserved. TLD RevaMP is GPL-3.0.</p>
+  <p>Unofficial community site. Not affiliated with, or endorsed by, the developers of The Long Drive.
+  &middot; <a href="/about.html">About &amp; credits</a> &middot; <a href="https://github.com/Normal99/TLD-RevaMP">TLD RevaMP on GitHub</a></p>
 </div></footer>
 </body>
 </html>
